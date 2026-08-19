@@ -1,0 +1,7 @@
+id,easting,northing,role,remarks,computation_sheet_no,description_no,page,beacon_remarks
+CORS-A,833200.00,180300.00,Reference CORS,Reference control,,,,
+P01,833356.39,180404.48,Beacon,Adjoining access road,CS-01,D-01,1,Existing pillar
+P02,833317.35,180452.99,Beacon,Adjoining family land,CS-01,D-02,1,Concrete beacon
+P03,833381.82,180518.39,Beacon,Adjoining developed plot,CS-01,D-03,1,Iron pin
+P04,833438.90,180461.06,Beacon,Adjoining reserve land,CS-01,D-04,1,New pillar
+CORS-B,833520.00,180310.00,Reference CORS,Reference control,,,,

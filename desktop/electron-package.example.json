@@ -1,0 +1,33 @@
+{
+  "name": "airban-converter",
+  "productName": "Airban Converter",
+  "version": "0.41.1-beta.1",
+  "description": "Ghana coordinate conversion and land survey workstation.",
+  "main": "desktop/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "com.airban.converter",
+    "productName": "Airban Converter",
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/icons/airban-icon.ico"
+    },
+    "files": [
+      "index.html",
+      "manifest.json",
+      "manifest.webmanifest",
+      "service-worker.js",
+      "src/**/*",
+      "samples/**/*",
+      "desktop/main.js",
+      "desktop/preload.js"
+    ]
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  }
+}

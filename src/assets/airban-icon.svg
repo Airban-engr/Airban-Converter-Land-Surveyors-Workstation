@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Airban Converter icon">
+  <rect width="512" height="512" rx="96" fill="#0b1118"/>
+  <path d="M256 66 410 155v71l-52 30v-70l-102-59-102 59v70l-52-30v-71L256 66Z" fill="#202b37"/>
+  <path d="M410 286v71l-154 89-154-89v-71l52 30v11l102 59 102-59v-11l52-30Z" fill="#3cae49"/>
+  <path d="M183 213 256 171l73 42v86l-73 42-73-42v-86Z" fill="#0f1720" stroke="#dbe8df" stroke-width="18"/>
+  <path d="M103 155 256 66l154 89-52 30-102-59-102 59-51-30Z" fill="#2d3947" opacity=".9"/>
+  <path d="M154 316v41l102 59 102-59v-41l52-30v71l-154 89-154-89v-71l52 30Z" fill="#4ec65b"/>
+</svg>
