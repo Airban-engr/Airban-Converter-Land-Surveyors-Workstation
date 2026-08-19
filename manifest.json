@@ -1,0 +1,42 @@
+{
+  "name": "Airban Converter",
+  "short_name": "Airban",
+  "id": "./",
+  "description": "Coordinate conversion for Ghana survey workflows.",
+  "start_url": "./",
+  "scope": "./",
+  "lang": "en",
+  "dir": "ltr",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#edf2f0",
+  "theme_color": "#151b22",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "src/assets/airban-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/assets/icons/airban-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "src/assets/icons/airban-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "src/assets/icons/airban-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

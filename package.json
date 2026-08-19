@@ -1,0 +1,59 @@
+{
+  "name": "airban-converter-workstation",
+  "productName": "Airban Converter",
+  "version": "0.41.1-beta.1",
+  "description": "Ghana coordinate conversion and land survey workstation.",
+  "main": "desktop/main.js",
+  "private": true,
+  "author": "Airban Engineering",
+  "license": "UNLICENSED",
+  "scripts": {
+    "desktop": "electron .",
+    "dist:dir": "electron-builder --dir",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "com.airban.converter",
+    "productName": "Airban Converter",
+    "directories": {
+      "output": "dist-desktop",
+      "buildResources": "src/assets"
+    },
+    "files": [
+      "index.html",
+      "manifest.json",
+      "manifest.webmanifest",
+      "service-worker.js",
+      "src/**/*",
+      "samples/**/*",
+      "desktop/main.js",
+      "desktop/preload.js",
+      "desktop/README.md"
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "src/assets/icons/airban-icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Airban Converter"
+    }
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  }
+}

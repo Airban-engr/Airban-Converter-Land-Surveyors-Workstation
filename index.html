@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airban Converter</title>
+  <meta name="description" content="Coordinate conversion for Ghana survey workflows.">
+  <meta name="application-name" content="Airban Converter">
+  <meta name="theme-color" content="#151b22">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Airban Converter">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/assets/airban-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="src/assets/icons/airban-apple-touch-icon.png">
+  <link rel="stylesheet" href="src/styles/app.css">
+</head>
+<body>
+  <div class="mobile-url-warning" id="mobile-url-warning">
+    <strong>Open the hosted HTTPS app link, not this index file.</strong>
+    <span>For Android use Chrome. For iPhone or iPad use Safari, then Share > Add to Home Screen. The install option will not appear from Files, WhatsApp previews, email attachments, zip previews, or file:// links.</span>
+  </div>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="src/assets/airban-full-logo.jpg" alt="">
+        </div>
+        <div>
+          <h1>Airban Converter</h1>
+          <p>Ghana grid, WGS84 geographic, WGS84 UTM, DMS, CSV, and map review.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" type="button" id="about-app">About</button>
+        <button class="install-button" type="button" id="install-app">Install</button>
+        <span class="status-pill"><span></span> v0.41.1-beta.1 Beta</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="tools-column" aria-label="Coordinate conversion tools">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Coordinate Tools</h2>
+            <p>Convert one point, parse DMS text, or process a CSV batch.</p>
+          </div>
+          <div class="panel-body">
+            <div class="tabs" role="tablist" aria-label="Conversion modes">
+              <button class="tab-button is-active" type="button" data-tab="grid-panel" aria-selected="true">Grid to WGS84</button>
+              <button class="tab-button" type="button" data-tab="wgs-panel" aria-selected="false">WGS84 to Grid</button>
+              <button class="tab-button" type="button" data-tab="utm-panel" aria-selected="false">UTM to Grid</button>
+              <button class="tab-button" type="button" data-tab="dms-panel" aria-selected="false">DMS Parser</button>
+            </div>
+
+            <section class="tab-panel is-active" id="grid-panel">
+              <div class="form-grid">
+                <label class="field">
+                  <span>Easting</span>
+                  <input id="grid-easting" inputmode="decimal" placeholder="833356.39">
+                </label>
+                <label class="field">
+                  <span>Northing</span>
+                  <input id="grid-northing" inputmode="decimal" placeholder="180404.48">
+                </label>
+                <label class="field field-full">
+                  <span>Grid measurement unit</span>
+                  <select id="grid-unit">
+                    <option value="gold_coast_foot">Gold Coast foot - EPSG native</option>
+                    <option value="metre">Metre</option>
+                    <option value="international_foot">International foot</option>
+                  </select>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="button" type="button" id="convert-grid">Convert</button>
+                <button class="button secondary" type="button" id="sample-grid">Sample</button>
+              </div>
+            </section>
+
+            <section class="tab-panel" id="wgs-panel">
+              <div class="form-grid">
+                <label class="field">
+                  <span>Latitude</span>
+                  <input id="wgs-lat" inputmode="decimal" placeholder="5.166826">
+                </label>
+                <label class="field">
+                  <span>Longitude</span>
+                  <input id="wgs-lon" inputmode="decimal" placeholder="-1.183002">
+                </label>
+                <label class="field field-full">
+                  <span>Output grid measurement unit</span>
+                  <select id="wgs-output-unit">
+                    <option value="gold_coast_foot">Gold Coast foot - EPSG native</option>
+                    <option value="metre">Metre</option>
+                    <option value="international_foot">International foot</option>
+                  </select>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="button" type="button" id="convert-wgs">Convert</button>
+                <button class="button secondary" type="button" id="sample-wgs">Accra</button>
+              </div>
+            </section>
+
+            <section class="tab-panel" id="utm-panel">
+              <div class="form-grid">
+                <label class="field">
+                  <span>UTM Easting</span>
+                  <input id="utm-easting" inputmode="decimal" placeholder="701403.709">
+                </label>
+                <label class="field">
+                  <span>UTM Northing</span>
+                  <input id="utm-northing" inputmode="decimal" placeholder="571392.732">
+                </label>
+                <label class="field">
+                  <span>WGS84 UTM zone</span>
+                  <select id="utm-zone">
+                    <option value="30N">Zone 30N - EPSG:32630</option>
+                    <option value="31N">Zone 31N - EPSG:32631</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Output grid measurement unit</span>
+                  <select id="utm-output-unit">
+                    <option value="gold_coast_foot">Gold Coast foot - EPSG native</option>
+                    <option value="metre">Metre</option>
+                    <option value="international_foot">International foot</option>
+                  </select>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="button" type="button" id="convert-utm">Convert</button>
+                <button class="button secondary" type="button" id="sample-utm">Sample</button>
+              </div>
+            </section>
+
+            <section class="tab-panel" id="dms-panel">
+              <div class="form-grid">
+                <label class="field field-full">
+                  <span>Latitude DMS</span>
+                  <div class="dms-row">
+                    <input id="lat-deg" inputmode="decimal" placeholder="5" aria-label="Latitude degrees">
+                    <input id="lat-min" inputmode="decimal" placeholder="10" aria-label="Latitude minutes">
+                    <input id="lat-sec" inputmode="decimal" placeholder="0.575" aria-label="Latitude seconds">
+                    <select id="lat-dir" aria-label="Latitude hemisphere">
+                      <option value="N">N</option>
+                      <option value="S">S</option>
+                    </select>
+                  </div>
+                </label>
+                <label class="field field-full">
+                  <span>Longitude DMS</span>
+                  <div class="dms-row">
+                    <input id="lon-deg" inputmode="decimal" placeholder="1" aria-label="Longitude degrees">
+                    <input id="lon-min" inputmode="decimal" placeholder="10" aria-label="Longitude minutes">
+                    <input id="lon-sec" inputmode="decimal" placeholder="58.808" aria-label="Longitude seconds">
+                    <select id="lon-dir" aria-label="Longitude hemisphere">
+                      <option value="E">E</option>
+                      <option value="W" selected>W</option>
+                    </select>
+                  </div>
+                </label>
+                <label class="field field-full">
+                  <span>Or paste DMS text</span>
+                  <textarea id="freeform-dms" placeholder="5 deg 10' 0.575&quot; N, 1 deg 10' 58.808&quot; W"></textarea>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="button" type="button" id="convert-dms">Parse DMS</button>
+                <button class="button secondary" type="button" id="sample-dms">Sample</button>
+              </div>
+            </section>
+
+            <div class="message" id="message" role="status"></div>
+          </div>
+        </div>
+
+        <div class="panel output-panel">
+          <div class="panel-head compact">
+            <h2>Output</h2>
+          </div>
+          <div class="panel-body">
+            <div class="result-unit-controls">
+              <label class="field">
+                <span>Ghana Grid result unit</span>
+                <select id="grid-result-unit">
+                  <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                  <option value="metre">Metre</option>
+                  <option value="international_foot">International foot</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>WGS84 UTM zone</span>
+                <select id="single-utm-zone">
+                  <option value="auto">Auto from longitude</option>
+                  <option value="30N">Zone 30N - EPSG:32630</option>
+                  <option value="31N">Zone 31N - EPSG:32631</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>WGS84 UTM result unit</span>
+                <select id="utm-result-unit">
+                <option value="metre">Metre - EPSG native</option>
+                <option value="international_foot">International foot</option>
+              </select>
+              </label>
+            </div>
+            <div class="result-grid">
+              <div class="result-box">
+                <span>Latitude</span>
+                <strong id="result-lat">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Longitude</span>
+                <strong id="result-lon">-</strong>
+              </div>
+              <div class="result-box">
+                <span>DMS</span>
+                <strong id="result-dms">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Ghana Grid</span>
+                <strong id="result-grid">-</strong>
+              </div>
+              <div class="result-box field-full">
+                <span>WGS84 UTM</span>
+                <strong id="result-utm">-</strong>
+              </div>
+            </div>
+            <div class="result-actions">
+              <button class="button secondary" type="button" id="copy-results" disabled>Copy Results</button>
+            </div>
+            <dl class="review-strip" aria-label="Conversion review">
+              <div>
+                <dt>Mode</dt>
+                <dd id="review-mode">Sample point</dd>
+              </div>
+              <div>
+                <dt>Points</dt>
+                <dd id="review-count">1</dd>
+              </div>
+              <div>
+                <dt>Unit</dt>
+                <dd id="review-unit">Gold Coast ft</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd id="review-status">Ready</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="panel workstation-panel">
+          <div class="panel-head">
+            <h2>Parcel Workstation</h2>
+            <p>Enter project details and parcel beacons to produce survey computation outputs.</p>
+          </div>
+          <div class="panel-body parcel-section">
+            <div class="section-subhead">
+              <h3>Project Details</h3>
+            </div>
+            <div class="form-grid">
+              <label class="field field-full">
+                <span>Project / job name</span>
+                <input id="project-name" placeholder="Akatichua Parcel Survey">
+              </label>
+              <label class="field">
+                <span>Parcel locality</span>
+                <input id="parcel-locality" placeholder="Akatichua">
+              </label>
+              <label class="field">
+                <span>District</span>
+                <input id="parcel-district" placeholder="Mfantsiman Municipal">
+              </label>
+              <label class="field">
+                <span>Client name</span>
+                <input id="parcel-client" placeholder="Client name">
+              </label>
+              <label class="field">
+                <span>Regional number</span>
+                <input id="parcel-regional-number" placeholder="SGC. N612/21">
+              </label>
+              <label class="field">
+                <span>Reference CORS ID</span>
+                <input id="parcel-cors-id" placeholder="CORS ID">
+              </label>
+              <label class="field">
+                <span>Survey date</span>
+                <input id="survey-date" type="date">
+              </label>
+              <label class="field">
+                <span>Prepared by / surveyor</span>
+                <input id="prepared-by" placeholder="Surveyor name">
+              </label>
+              <label class="field">
+                <span>Reference rows</span>
+                <select id="reference-row-mode">
+                  <option value="auto">Auto-detect CORS/reference rows</option>
+                  <option value="exclude_first_last">Exclude first and last rows</option>
+                  <option value="include_all">Include every row</option>
+                </select>
+              </label>
+              <label class="field field-full">
+                <span>Boundary note</span>
+                <textarea id="parcel-boundary" placeholder="the width road given in the diagram of survey with reference to the cardinal North"></textarea>
+              </label>
+            </div>
+
+            <div class="section-subhead">
+              <h3>History of Survey</h3>
+            </div>
+            <div class="history-card">
+              <div class="form-grid">
+                <label class="field">
+                  <span>Survey purpose</span>
+                  <input id="history-purpose" placeholder="prepare a cadastral site plan">
+                </label>
+                <label class="field">
+                  <span>Reported acreage</span>
+                  <input id="history-acreage" inputmode="decimal" placeholder="Auto from parcel area">
+                </label>
+                <label class="field">
+                  <span>Reported hectares</span>
+                  <input id="history-hectares" inputmode="decimal" placeholder="Auto from parcel area">
+                </label>
+                <label class="field field-full">
+                  <span>Custom History of Survey wording</span>
+                  <textarea id="history-override" placeholder="Leave blank to use the generated History of Survey text."></textarea>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="button secondary" type="button" id="refresh-history">Preview History</button>
+                <button class="button secondary" type="button" id="copy-history" disabled>Copy History</button>
+                <button class="button secondary" type="button" id="download-history-doc" disabled>Word</button>
+              </div>
+              <div class="history-preview" id="history-preview">
+                History of Survey draft appears here.
+              </div>
+            </div>
+
+            <div class="legacy-workstation-fields" hidden aria-hidden="true">
+              <input id="issue-date" type="date">
+              <input id="checked-by">
+              <input id="report-revision">
+              <select id="report-status">
+                <option value=""></option>
+                <option value="Draft">Draft</option>
+                <option value="For review">For review</option>
+                <option value="Issued">Issued</option>
+              </select>
+              <input id="project-file" type="file" accept=".json,.airban-project.json,application/json">
+              <textarea id="project-notes"></textarea>
+              <button type="button" id="export-project">Save Project File</button>
+              <button type="button" id="import-project">Open Project File</button>
+              <button type="button" id="save-browser-draft">Save Draft</button>
+              <button type="button" id="restore-browser-draft">Restore Draft</button>
+              <button type="button" id="clear-browser-draft">Clear Draft</button>
+              <div id="project-status">No browser draft restored yet.</div>
+              <input id="observation-file" type="file" accept=".csv,.txt,.dat,.asc,text/csv,text/plain">
+              <select id="observation-unit">
+                <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                <option value="metre">Metre</option>
+                <option value="international_foot">International foot</option>
+              </select>
+              <select id="observation-order">
+                <option value="id_easting_northing">Point, Easting, Northing</option>
+                <option value="id_northing_easting">Point, Northing, Easting</option>
+              </select>
+              <input id="observation-filter">
+              <textarea id="observation-text"></textarea>
+              <button type="button" id="import-observations">Import Observations</button>
+              <button type="button" id="sample-observations">Sample Observations</button>
+              <button type="button" id="use-observations-for-parcel" disabled>Use as Parcel</button>
+              <strong id="observation-count">-</strong>
+              <strong id="observation-rejected">-</strong>
+              <strong id="observation-source">-</strong>
+              <table id="observation-table">
+                <thead><tr><th>Observation points appear here</th></tr></thead>
+                <tbody><tr><td>No observations imported yet.</td></tr></tbody>
+              </table>
+              <input id="reduction-start-id">
+              <select id="reduction-unit">
+                <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                <option value="metre">Metre</option>
+                <option value="international_foot">International foot</option>
+              </select>
+              <input id="reduction-start-easting">
+              <input id="reduction-start-northing">
+              <input id="reduction-file" type="file" accept=".csv,.txt,.dat,.asc,text/csv,text/plain">
+              <textarea id="reduction-text"></textarea>
+              <button type="button" id="reduce-observations">Reduce Observations</button>
+              <button type="button" id="adjust-reduction" disabled>Adjust Traverse</button>
+              <button type="button" id="sample-reduction">Sample Reduction</button>
+              <button type="button" id="use-reduction-for-parcel" disabled>Use Raw</button>
+              <button type="button" id="use-adjusted-reduction-for-parcel" disabled>Use Adjusted</button>
+              <button type="button" id="download-reduction-csv" disabled>Traverse CSV</button>
+              <strong id="reduction-count">-</strong>
+              <strong id="reduction-distance">-</strong>
+              <strong id="reduction-close">-</strong>
+              <strong id="reduction-precision">-</strong>
+              <strong id="reduction-adjusted-close">-</strong>
+              <table id="reduction-table">
+                <thead><tr><th>Reduced coordinates appear here</th></tr></thead>
+                <tbody><tr><td>No observations reduced yet.</td></tr></tbody>
+              </table>
+              <input id="angular-start-id">
+              <select id="angular-unit">
+                <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                <option value="metre">Metre</option>
+                <option value="international_foot">International foot</option>
+              </select>
+              <input id="angular-start-easting">
+              <input id="angular-start-northing">
+              <input id="angular-initial-bearing">
+              <select id="angular-angle-mode">
+                <option value="deflection_right">Deflection right</option>
+                <option value="deflection_left">Deflection left</option>
+                <option value="interior_right">Interior angle right</option>
+                <option value="interior_left">Interior angle left</option>
+              </select>
+              <input id="angular-file" type="file" accept=".csv,.txt,.dat,.asc,text/csv,text/plain">
+              <textarea id="angular-text"></textarea>
+              <button type="button" id="reduce-angular-observations">Reduce Angles</button>
+              <button type="button" id="sample-angular">Sample Angular</button>
+            </div>
+
+            <div class="section-subhead">
+              <h3>Parcel Coordinates</h3>
+            </div>
+            <div class="form-grid">
+              <label class="field field-full">
+                <span>Coordinate CSV file</span>
+                <input id="parcel-file" type="file" accept=".csv,text/csv">
+              </label>
+              <label class="field">
+                <span>Preferred parcel unit</span>
+                <select id="parcel-unit">
+                  <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                  <option value="metre">Metre</option>
+                  <option value="international_foot">International foot</option>
+                </select>
+              </label>
+              <div class="format-note field-full">
+                <strong>Accepted format</strong>
+                <code>id,easting,northing</code>
+                <span>Optional columns: remarks, computation_sheet_no, description_no, page, beacon_remarks, role, code.</span>
+              </div>
+              <label class="field field-full">
+                <span>Parcel coordinate rows</span>
+                <textarea id="parcel-coordinates" placeholder="id,easting,northing,remarks,computation_sheet_no,description_no,page,beacon_remarks&#10;P01,833356.39,180404.48,Adjoining access road,CS-01,D-01,1,Existing pillar&#10;P02,833317.35,180452.99,Adjoining family land,CS-01,D-02,1,Concrete beacon&#10;P03,833381.82,180518.39,Adjoining developed plot,CS-01,D-03,1,Iron pin&#10;P04,833438.90,180461.06,Adjoining reserve land,CS-01,D-04,1,New pillar"></textarea>
+              </label>
+            </div>
+            <div class="actions">
+              <button class="button" type="button" id="compute-parcel">Compute Parcel</button>
+              <button class="button secondary" type="button" id="sample-parcel">Sample Parcel</button>
+              <button class="button secondary" type="button" id="download-parcel-csv" disabled>Active CSV</button>
+              <button class="button secondary" type="button" id="download-kml" disabled>KML</button>
+              <button class="button secondary" type="button" id="download-kmz" disabled>KMZ</button>
+              <button class="button secondary" type="button" id="download-dxf" disabled>DXF</button>
+              <button class="button secondary" type="button" id="download-computation-sheet" disabled>Computation Sheet</button>
+              <button class="button secondary" type="button" id="download-workbook" disabled>Workbook</button>
+              <button class="button secondary" type="button" id="download-report" disabled>Report</button>
+              <button class="button secondary" type="button" id="download-manifest" disabled>Manifest</button>
+            </div>
+
+            <div class="parcel-summary-grid">
+              <div class="result-box">
+                <span>Beacons</span>
+                <strong id="parcel-point-count">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Perimeter</span>
+                <strong id="parcel-perimeter">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Area acres</span>
+                <strong id="parcel-acreage">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Area hectares</span>
+                <strong id="parcel-hectares">-</strong>
+              </div>
+              <div class="result-box">
+                <span>Source</span>
+                <strong id="parcel-source">Manual / pasted coordinates</strong>
+              </div>
+            </div>
+            <div class="parcel-basis-strip" aria-label="Parcel computation basis">
+              <div><span>Input rows</span><strong id="parcel-input-count">-</strong></div>
+              <div><span>Reference rows</span><strong id="parcel-reference-count">-</strong></div>
+              <div><span>Row rule</span><strong id="parcel-row-mode">Auto-detect CORS/reference rows</strong></div>
+            </div>
+
+            <div hidden aria-hidden="true">
+              <div id="qc-summary">Compute a parcel to run workstation quality checks.</div>
+              <table id="qc-table">
+                <thead><tr><th>Quality checks appear here</th></tr></thead>
+                <tbody><tr><td>No parcel computed yet.</td></tr></tbody>
+              </table>
+            </div>
+
+            <div class="output-tabs" role="tablist" aria-label="Parcel output views">
+              <button class="output-tab is-active" type="button" data-parcel-output="plan">Plan Data</button>
+              <button class="output-tab" type="button" data-parcel-output="schedule">Bearing &amp; Distance</button>
+              <button class="output-tab" type="button" data-parcel-output="beacon">Beacon Index</button>
+              <button class="output-tab" type="button" data-parcel-output="area">Area Computation</button>
+            </div>
+
+            <div class="csv-preview parcel-preview" aria-label="Parcel computation preview">
+              <table id="parcel-output-table">
+                <thead><tr><th>Parcel outputs appear here</th></tr></thead>
+                <tbody><tr><td>No parcel computed yet.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel batch-panel">
+          <div class="panel-head">
+            <h2>Batch CSV</h2>
+            <p>Upload many points, convert them together, and export CSV or GeoJSON.</p>
+          </div>
+          <div class="panel-body csv-section">
+            <div class="form-grid">
+              <label class="field field-full">
+                <span>CSV file</span>
+                <input id="csv-file" type="file" accept=".csv,text/csv">
+              </label>
+              <label class="field">
+                <span>Mode</span>
+                <select id="csv-mode">
+                  <option value="grid_to_wgs">Grid to WGS84</option>
+                  <option value="wgs_to_grid">WGS84 to Grid</option>
+                  <option value="utm_to_grid">UTM to Grid</option>
+                  <option value="grid_to_utm">Grid to UTM</option>
+                </select>
+              </label>
+              <label class="field">
+                <span id="csv-grid-unit-label">Ghana Grid input/output unit</span>
+                <select id="csv-unit">
+                  <option value="gold_coast_foot">Gold Coast foot - Ghana Grid ft</option>
+                  <option value="metre">Metre</option>
+                  <option value="international_foot">International foot</option>
+                </select>
+              </label>
+              <label class="field field-full">
+                <span>WGS84 UTM zone</span>
+                <select id="csv-utm-zone">
+                  <option value="auto">Auto from longitude / row zone</option>
+                  <option value="30N">Zone 30N - EPSG:32630</option>
+                  <option value="31N">Zone 31N - EPSG:32631</option>
+                </select>
+              </label>
+              <label class="field field-full">
+                <span>UTM output unit</span>
+                <select id="csv-utm-output-unit">
+                  <option value="metre">Metre - EPSG native</option>
+                  <option value="international_foot">International foot</option>
+                </select>
+              </label>
+            </div>
+            <div class="actions">
+              <button class="button" type="button" id="convert-csv">Convert CSV</button>
+              <button class="button secondary" type="button" id="download-csv" disabled>Download</button>
+              <button class="button secondary" type="button" id="download-geojson" disabled>GeoJSON</button>
+            </div>
+            <div class="sample-links">
+              <a href="samples/ghana-grid-header.csv" download>Grid sample</a>
+              <a href="samples/parcel-beacons.csv" download>Parcel sample</a>
+              <a href="samples/parcel-with-reference-cors.csv" download>Parcel CORS sample</a>
+              <a href="samples/wgs84-points.csv" download>WGS84 sample</a>
+              <a href="samples/utm-zone-30n-points.csv" download>UTM sample</a>
+            </div>
+            <div class="csv-preview" aria-label="CSV preview">
+              <table id="csv-table">
+                <thead><tr><th>CSV output appears here</th></tr></thead>
+                <tbody><tr><td>No file converted yet.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="map-column" aria-label="Map preview">
+        <div class="panel map-panel">
+          <div class="map-head">
+            <div>
+              <h2>Map Preview</h2>
+              <p>Converted points in WGS84.</p>
+            </div>
+            <div class="map-meta" id="map-meta">Centered on Ghana</div>
+          </div>
+          <div id="map"></div>
+          <div class="map-footer">
+            <div><strong>Product</strong><span>Airban Converter</span></div>
+            <div><strong>Version</strong><span>0.41.1-beta.1</span></div>
+            <div><strong>EPSG</strong><span>2136, 4326, 32630, 32631</span></div>
+            <div><strong>Native Unit</strong><span>Gold Coast foot</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="about-modal" hidden>
+    <div class="modal-backdrop" data-close-about></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <header class="modal-head">
+        <h2 id="about-title">About Airban Converter</h2>
+        <button class="icon-button" type="button" id="close-about" aria-label="Close about panel">x</button>
+      </header>
+      <div class="modal-body">
+        <dl class="about-list">
+          <div><dt>Version</dt><dd>0.41.1-beta.1 internal beta</dd></div>
+          <div><dt>Release stage</dt><dd>Internal beta for controlled testing</dd></div>
+          <div><dt>Projection</dt><dd>Accra / Ghana National Grid</dd></div>
+          <div><dt>Transformation</dt><dd>EPSG:2136, EPSG:4326, EPSG:32630, EPSG:32631</dd></div>
+          <div><dt>Native unit</dt><dd>Gold Coast foot</dd></div>
+          <div><dt>Map tiles</dt><dd>OpenStreetMap online basemap</dd></div>
+        </dl>
+        <p class="accuracy-note">For cadastral, legal, or high-precision survey work, confirm results against trusted Ghana control points and the transformation method required by the relevant authority.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal" id="install-modal" hidden>
+    <div class="modal-backdrop" data-close-install></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="install-title">
+      <header class="modal-head">
+        <h2 id="install-title">Install Airban Converter</h2>
+        <button class="icon-button" type="button" id="close-install" aria-label="Close install panel">x</button>
+      </header>
+      <div class="modal-body">
+        <div class="install-grid">
+          <article class="install-card">
+            <h3>Desktop</h3>
+            <p>Open the HTTPS app URL in Chrome or Edge. Use the address-bar install icon, or press this Install button when the browser offers the app prompt.</p>
+          </article>
+          <article class="install-card">
+            <h3>Android</h3>
+            <p>Open the HTTPS app URL in Chrome. If there is no install icon, use the three-dot menu and choose Install app or Add to Home screen.</p>
+          </article>
+          <article class="install-card">
+            <h3>iPhone</h3>
+            <p>Open the HTTPS app URL in Safari. iOS does not show a browser install icon; tap Share, then Add to Home Screen.</p>
+          </article>
+        </div>
+        <p class="accuracy-note">Do not install from a downloaded `index.html` file or zip preview. Once installed from HTTPS, coordinate conversion and CSV tools can run after the first app load. The online map basemap still needs internet unless offline map tiles are added later.</p>
+      </div>
+    </section>
+  </div>
+
+  <script src="src/vendor/proj4/proj4.js"></script>
+  <script src="src/vendor/leaflet/leaflet.js"></script>
+  <script src="src/js/constants.js"></script>
+  <script src="src/js/utils.js"></script>
+  <script src="src/js/units.js"></script>
+  <script src="src/js/dms.js"></script>
+  <script src="src/js/converter.js"></script>
+  <script src="src/js/csv.js"></script>
+  <script src="src/js/observations.js"></script>
+  <script src="src/js/survey.js"></script>
+  <script src="src/js/parcel.js"></script>
+  <script src="src/js/qc.js"></script>
+  <script src="src/js/report.js"></script>
+  <script src="src/js/project.js"></script>
+  <script src="src/js/map.js"></script>
+  <script src="src/js/app.js"></script>
+  <script src="src/js/pwa.js"></script>
+</body>
+</html>
